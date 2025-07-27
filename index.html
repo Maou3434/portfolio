@@ -545,8 +545,8 @@
                             <span class="terminal-green">$</span> ls -la ~/projects/
                         </h2>
                     </div>
-                    <div class="projects-grid">
-                        <div class="project-card">
+                    <div class="projects-grid" style="display: flex; overflow-x: auto; gap: var(--spacing-xl); flex-wrap: nowrap; scroll-snap-type: x mandatory;">
+                        <div class="project-card" style="scroll-snap-align: start;">
                             <div class="project-image">
                                 <img src="fuzzy.jpg" alt="Fuzzy Logic Color Recommendation System" class="project-img">
                                 <div class="project-overlay">
@@ -571,7 +571,7 @@
                             </div>
                         </div>
 
-                        <div class="project-card">
+                        <div class="project-card" style="scroll-snap-align: start;">
                             <div class="project-image">
                                 <img src="rfid.webp" alt="Smart RFID Access Control System" class="project-img">
                                 <div class="project-overlay">
@@ -598,7 +598,7 @@
                             </div>
                         </div>
 
-                        <div class="project-card">
+                        <div class="project-card" style="scroll-snap-align: start;">
                             <div class="project-image">
                                 <img src="whatsapp.png" alt="WhatsApp Chat Analyzer" class="project-img">
                                 <div class="project-overlay">
@@ -620,6 +620,31 @@
                                 <div class="project-links">
                                     <a href="https://github.com/Maou3434/whatswarped" class="project-btn">GitHub</a>
                                     <a href="https://maou3434.github.io/whatswarped/" class="project-btn">Live Demo</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-card" style="scroll-snap-align: start;">
+                            <div class="project-image">
+                                <img src="javaintern.png" alt="Online Learning Platform Management System" class="project-img">
+                                <div class="project-overlay">
+                                    <span class="project-type research">INTERNSHIP</span>
+                                </div>
+                            </div>
+                            <div class="project-content">
+                                <h3 class="project-title">Online Learning Platform Management System</h3>
+                                <p class="project-description">
+                                    Developed Online Learning Platform Management System using Spring Boot, implementing dual-database architecture with MySQL for transactional operations and MongoDB for read performance.
+                                </p>
+                                <div class="project-tech">
+                                    <span class="tech-tag">Spring Boot</span>
+                                    <span class="tech-tag">MySQL</span>
+                                    <span class="tech-tag">MongoDB</span>
+                                    <span class="tech-tag">REST APIs</span>
+                                    <span class="tech-tag">SonarQube</span>
+                                    <span class="tech-tag">Apache Maven</span>
+                                </div>
+                                <div class="project-links">
+                                    <a href="https://github.com/Maou3434/java_intern" class="project-btn">GitHub</a>
                                 </div>
                             </div>
                         </div>
@@ -730,7 +755,9 @@
                         <div class="contact-form-container">
                             <div class="contact-card">
                                 <h3 class="card-title">Send Message</h3>
-                                <form class="contact-form" id="contact-form">
+                                <form class="contact-form" id="contact-form" action="https://formsubmit.co/abimanyu.jayaganesh@gmail.com" method="POST">
+                                    <input type="hidden" name="_captcha" value="false">
+                                    <!-- Optional: <input type="hidden" name="_next" value="https://yourdomain.com/thankyou.html"> -->
                                     <div class="form-group">
                                         <label class="form-label">$ echo "name" ></label>
                                         <input type="text" name="name" class="form-input" required>

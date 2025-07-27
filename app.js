@@ -1119,6 +1119,11 @@ class TerminalPortfolio {
         if (theme) {
             document.documentElement.style.setProperty('--terminal-green', theme.primary);
             document.documentElement.style.setProperty('--terminal-cursor', theme.primary);
+            document.documentElement.style.setProperty('--terminal-accent', theme.primary);
+            document.documentElement.style.setProperty('--terminal-accent-secondary', theme.secondary);
+            document.documentElement.style.setProperty('--terminal-glow', `0 0 20px ${theme.primary}, 0 0 30px ${theme.primary}`);
+            document.documentElement.style.setProperty('--terminal-box-shadow', `0 0 50px ${theme.primary}, 0 0 10px ${theme.secondary}`);
+            document.documentElement.style.setProperty('--terminal-accent-bg', hexToRgba(theme.primary, 0.1));
             this.addToTerminal(`<div class="command-output"><p class="success-message">Theme changed to ${themeName}</p></div>`);
         } else {
             this.addToTerminal(`<div class="command-output"><p class="error-message">Unknown theme: ${themeName}</p><p class="terminal-dim">Available themes: ${Object.keys(themes).join(', ')}</p></div>`);
@@ -1158,6 +1163,13 @@ class TerminalPortfolio {
 }
 
 // Utility functions
+function hexToRgba(hex, alpha) {
+    let c = hex.replace('#', '');
+    if (c.length === 3) c = c.split('').map(x => x + x).join('');
+    const num = parseInt(c, 16);
+    return `rgba(${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}, ${alpha})`;
+}
+
 function closeTerminal() {
     console.log('Terminal close clicked');
 }
