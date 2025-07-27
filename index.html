@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abimanyu Jayaganesh - Terminal Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
+</head>
+<body>
+    <!-- Boot Sequence -->
+    <div id="boot-sequence" class="boot-sequence">
+        <div class="boot-container">
+            <div class="boot-header">
+                <h1 class="boot-title">Portfolio System v2.1.0</h1>
+                <div class="boot-subtitle">Initializing Abimanyu's Experience...</div>
+            </div>
+            <div class="boot-content">
+                <div class="boot-messages" id="boot-messages">
+                    <!-- Boot messages will be added dynamically -->
+                </div>
+                <div class="boot-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <div class="progress-text" id="progress-text">0%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mode Selection -->
+    <div id="mode-selection" class="mode-selection hidden">
+        <div class="selection-container">
+            <div class="selection-header">
+                <pre class="welcome-ascii">
+██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗
+██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝
+██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗  
+██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝  
+╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗
+ ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝
+                </pre>
+                <h2 class="selection-title">Welcome to Abimanyu's Portfolio!</h2>
+                <p class="selection-subtitle">Choose your interface mode:</p>
+            </div>
+            <div class="mode-options">
+                <div class="mode-option" id="terminal-option" tabindex="0">
+                    <div class="option-icon">💻</div>
+                    <div class="option-content">
+                        <h3 class="option-title">[1] Terminal Mode</h3>
+                        <p class="option-description">Full CLI experience with interactive commands</p>
+                    </div>
+                </div>
+                <div class="mode-option" id="gui-option" tabindex="0">
+                    <div class="option-icon">🌐</div>
+                    <div class="option-content">
+                        <h3 class="option-title">[2] GUI Mode</h3>
+                        <p class="option-description">Modern web interface with visual design</p>
+                    </div>
+                </div>
+            </div>
+            <div class="selection-instructions">
+                <p>Type <span class="key-highlight">1</span> or <span class="key-highlight">2</span> to select</p>
+                <p class="selection-hint">You can switch modes anytime later!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hacker Screen -->
+    <div id="hacker-screen" class="hacker-screen hidden">
+        <div class="matrix-container">
+            <canvas id="matrix-canvas" class="matrix-canvas"></canvas>
+            <div class="hacker-overlay">
+                <div class="hacker-text">
+                    <div class="hacker-message" id="hacker-message">ACCESSING PORTFOLIO SYSTEM...</div>
+                    <div class="hacker-progress">
+                        <span class="progress-indicator">█████████</span>
+                        <span class="access-granted hidden" id="access-granted">ACCESS GRANTED</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terminal Mode -->
+    <div id="terminal-mode" class="terminal-mode hidden">
+        <div class="terminal-container">
+            <div class="terminal-header">
+                <div class="terminal-controls">
+                    <span class="control red" onclick="closeTerminal()"></span>
+                    <span class="control yellow" onclick="minimizeTerminal()"></span>
+                    <span class="control green" onclick="maximizeTerminal()"></span>
+                </div>
+                <div class="terminal-title">abimanyu@portfolio:~$ - Interactive Terminal</div>
+                <div class="terminal-actions">
+                    <button class="mode-switch-btn" onclick="app.switchToPortfolioMode()" title="Switch to Portfolio View">
+                        🌐 GUI Mode
+                    </button>
+                </div>
+            </div>
+            <div class="terminal-body" id="terminal-body">
+                <div class="terminal-content" id="terminal-content">
+                    <div class="welcome-message">
+                        <pre class="ascii-logo">
+    ██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗
+    ██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝
+    ██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗  
+    ██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝  
+    ╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗
+     ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝
+                        </pre>
+                        <div class="welcome-text">
+                            <p class="terminal-green">Welcome to Abimanyu Jayaganesh's Interactive Portfolio Terminal!</p>
+                            <p>Type <span class="command-highlight">'help'</span> to see available commands</p>
+                            <p>Type <span class="command-highlight">'gui'</span> or <span class="command-highlight">'web'</span> to switch to portfolio view</p>
+                            <p class="terminal-dim">Use ↑↓ arrow keys to navigate command history</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-line" id="input-line">
+                    <span class="terminal-prompt">abimanyu@portfolio:~$</span>
+                    <input type="text" id="terminal-input" class="terminal-input" autocomplete="off" spellcheck="false">
+                    <span class="terminal-cursor">|</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Portfolio Mode -->
+    <div id="portfolio-mode" class="portfolio-mode hidden">
+        <!-- Navigation -->
+        <nav class="portfolio-nav">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <span class="terminal-green">$</span> abimanyu.dev
+                </div>
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a href="#about" class="nav-link">[about]</a></li>
+                    <li><a href="#education" class="nav-link">[education]</a></li>
+                    <li><a href="#experience" class="nav-link">[experience]</a></li>
+                    <li><a href="#skills" class="nav-link">[skills]</a></li>
+                    <li><a href="#projects" class="nav-link">[projects]</a></li>
+                    <li><a href="#achievements" class="nav-link">[achievements]</a></li>
+                    <li><a href="#contact" class="nav-link">[contact]</a></li>
+                </ul>
+                <button class="mode-switch-btn" onclick="app.switchToTerminalMode()" title="Switch to Terminal Mode">
+                    💻 Terminal Mode
+                </button>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="portfolio-content">
+            <!-- Hero Section -->
+            <section id="hero" class="hero-section">
+                <div class="container">
+                    <div class="hero-content">
+                        <div class="hero-terminal">
+                            <div class="terminal-header">
+                                <div class="terminal-controls">
+                                    <span class="control red"></span>
+                                    <span class="control yellow"></span>
+                                    <span class="control green"></span>
+                                </div>
+                                <div class="terminal-title">~/introduction</div>
+                            </div>
+                            <div class="terminal-body">
+                                <div class="command-line">
+                                    <span class="terminal-prompt">abimanyu@dev:~$</span>
+                                    <span class="typing-text">whoami --verbose</span>
+                                </div>
+                                <div class="hero-info">
+                                    <h1 class="hero-name">Abimanyu Jayaganesh</h1>
+                                    <div class="hero-title">
+                                        <span class="terminal-green">[</span>Computer Science Engineering Student<span class="terminal-green">]</span>
+                                    </div>
+                                    <div class="hero-subtitle">
+                                        VIT CSE Student | Software Engineer | IoT Enthusiast
+                                    </div>
+                                    <div class="hero-location">
+                                        <span class="terminal-dim">📍 Based in Coimbatore, TN</span>
+                                    </div>
+                                    <div class="hero-status">
+                                        <span class="status-indicator online">● AVAILABLE FOR OPPORTUNITIES</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section id="about" class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <span class="terminal-green">$</span> cat /about/personal-info.json
+                        </h2>
+                    </div>
+                    <div class="about-grid">
+                        <div class="about-info">
+                            <div class="info-card">
+                                <h3 class="card-title">Personal Information</h3>
+                                <div class="info-list">
+                                    <div class="info-item">
+                                        <span class="key">name:</span>
+                                        <span class="value">"Abimanyu Jayaganesh"</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="key">role:</span>
+                                        <span class="value">"Computer Science Engineering Student"</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="key">location:</span>
+                                        <span class="value">"Coimbatore, TN"</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="key">email:</span>
+                                        <span class="value">
+                                            <a href="mailto:abimanyu.jayaganesh@gmail.com" class="terminal-link">
+                                                "abimanyu.jayaganesh@gmail.com"
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="key">phone:</span>
+                                        <span class="value">"(+91) 73396 66043"</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="about-bio">
+                            <div class="info-card">
+                                <h3 class="card-title">About Me</h3>
+                                <p class="bio-text">
+                                    Passionate Computer Science and Engineering student at VIT Vellore with hands-on experience in software development and IoT systems. 
+                                    Currently developing expertise in full-stack development, machine learning, and innovative technology solutions.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Education Section -->
+            <section id="education" class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <span class="terminal-green">$</span> grep -r "education" ~/cv/
+                        </h2>
+                    </div>
+                    <div class="education-content">
+                        <div class="education-card">
+                            <div class="edu-header">
+                                <div class="edu-logo">
+                                    <img src="vit.jpg" alt="VIT Logo" class="institution-logo">
+                                </div>
+                                <div class="edu-details">
+                                    <h3 class="edu-title">Bachelor of Technology</h3>
+                                    <p class="edu-field">Computer Science and Engineering</p>
+                                    <p class="edu-institution">Vellore Institute of Technology (VIT), Vellore, TN</p>
+                                    <p class="edu-duration">Expected 2027</p>
+                                    <div class="edu-status">
+                                        <span class="status-badge active">🔥 IN PROGRESS</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="coursework">
+                                <h4 class="coursework-title">Relevant Coursework</h4>
+                                <div class="course-grid">
+                                    <div class="course-item">Data Structures and Algorithms</div>
+                                    <div class="course-item">Web Technologies</div>
+                                    <div class="course-item">Computer Architecture</div>
+                                    <div class="course-item">Microprocessor and Micro Controllers</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Experience Section -->
+            <section id="experience" class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <span class="terminal-green">$</span> git log --work-experience --oneline
+                        </h2>
+                    </div>
+                    <div class="experience-timeline">
+                        <div class="exp-item">
+                            <div class="exp-header">
+                                <div class="company-logo">
+                                    <img src="vvdn-logo.png" alt="VVDN Technologies" class="company-logo-img">
+                                </div>
+                                <div class="exp-details">
+                                    <h3 class="exp-title">Java Intern</h3>
+                                    <p class="company-name">VVDN Technologies</p>
+                                    <p class="exp-duration">June 2025 - July 2025</p>
+                                    <span class="status-badge completed">✅ COMPLETED</span>
+                                </div>
+                            </div>
+                            <div class="achievements">
+                                <h4>Key Achievements:</h4>
+                                <ul class="achievement-list">
+                                    <li>Developed Online Learning Platform Management System using Spring Boot, implementing dual-database architecture with MySQL for transactional operations and MongoDB for read performance</li>
+                                    <li>Designed and built RESTful APIs supporting CRUD functionality for users, courses, and platforms across multiple endpoints</li>
+                                    <li>Architected asynchronous data synchronization processes maintaining consistency between MySQL and MongoDB databases</li>
+                                    <li>Applied Controller-Service-Repository architecture pattern for code organization and maintainability</li>
+                                    <li>Utilized SonarQube for static code analysis to identify technical debt and code quality issues</li>
+                                </ul>
+                                <div class="tech-stack">
+                                    <span class="tech-tag">Spring Boot</span>
+                                    <span class="tech-tag">MySQL</span>
+                                    <span class="tech-tag">MongoDB</span>
+                                    <span class="tech-tag">REST APIs</span>
+                                    <span class="tech-tag">SonarQube</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="exp-item">
+                            <div class="exp-header">
+                                <div class="company-logo">
+                                    <img src="imik.png" alt="IMIK Technologies" class="company-logo-img">
+                                </div>
+                                <div class="exp-details">
+                                    <h3 class="exp-title">IoT Development Intern</h3>
+                                    <p class="company-name">IMIK Technologies</p>
+                                    <p class="exp-duration">May 2024 - June 2024</p>
+                                    <span class="status-badge completed">✅ COMPLETED</span>
+                                </div>
+                            </div>
+                            <div class="achievements">
+                                <h4>Key Achievements:</h4>
+                                <ul class="achievement-list">
+                                    <li>Constructed unified IoT monitoring platform using Django and AWS EC2, consolidating 3 microservices and reducing cloud costs by 1.5x</li>
+                                    <li>Deployed MQTT protocol for device communication across IoT network infrastructure</li>
+                                    <li>Architected multi-tenant system with role-based access controls for Admin, Owner, and Worker user types</li>
+                                    <li>Improved data visualization speed by 10x through RMS algorithm modifications</li>
+                                </ul>
+                                <div class="tech-stack">
+                                    <span class="tech-tag">Django</span>
+                                    <span class="tech-tag">AWS EC2</span>
+                                    <span class="tech-tag">MQTT</span>
+                                    <span class="tech-tag">IoT</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="exp-item">
+                            <div class="exp-header">
+                                <div class="company-logo">
+                                    <img src="toc.jpg" alt="Otaku Club VIT" class="company-logo-img">
+                                </div>
+                                <div class="exp-details">
+                                    <h3 class="exp-title">Public Relations and Media Head</h3>
+                                    <p class="company-name">Otaku Club VIT</p>
+                                    <p class="exp-duration">Dec 2024 - Present</p>
+                                    <span class="status-badge active">🔥 ACTIVE</span>
+                                </div>
+                            </div>
+                            <div class="achievements">
+                                <h4>Key Achievements:</h4>
+                                <ul class="achievement-list">
+                                    <li>Secured sponsorships through partnership development and vendor negotiations</li>
+                                    <li>Managed PR campaigns and digital outreach reaching 1,500+ students</li>
+                                    <li>Coordinated 3 cultural events during Riviera festival with 200+ participants</li>
+                                </ul>
+                                <div class="tech-stack">
+                                    <span class="tech-tag">Leadership</span>
+                                    <span class="tech-tag">Event Management</span>
+                                    <span class="tech-tag">Public Relations</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Skills Section -->
+            <section id="skills" class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <span class="terminal-green">$</span> npm list --skills --global
+                        </h2>
+                    </div>
+                    <div class="skills-grid">
+                        <div class="skill-category">
+                            <h3 class="category-title">Programming Languages</h3>
+                            <div class="skill-list">
+                                <div class="skill-item">
+                                    <span class="skill-name">Python</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" data-width="90"></div>
+                                    </div>
+                                    <span class="skill-level">90%</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span class="skill-name">Java</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" data-width="88"></div>
+                                    </div>
+                                    <span class="skill-level">88%</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span class="skill-name">JavaScript</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" data-width="85"></div>
+                                    </div>
+                                    <span class="skill-level">85%</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span class="skill-name">C++</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" data-width="80"></div>
+                                    </div>
+                                    <span class="skill-level">80%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="skill-category">
+                            <h3 class="category-title">Web Development</h3>
+                            <div class="skill-list">
+                                <div class="skill-item">
+                                    <span class="skill-name">Django</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" data-width="92"></div>
+                                    </div>
+                                    <span class="skill-level">92%</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span class="skill-name">HTML/CSS</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" data-width="90"></div>
+                                    </div>
+                                    <span class="skill-level">90%</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span class="skill-name">Spring Boot</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" data-width="88"></div>
+                                    </div>
+                                    <span class="skill-level">88%</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span class="skill-name">REST APIs</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" data-width="85"></div>
+                                    </div>
+                                    <span class="skill-level">85%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="skill-category">
+                            <h3 class="category-title">Databases & Cloud</h3>
+                            <div class="skill-list">
+                                <div class="skill-item">
+                                    <span class="skill-name">MySQL</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" data-width="90"></div>
+                                    </div>
+                                    <span class="skill-level">90%</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span class="skill-name">MongoDB</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" data-width="85"></div>
+                                    </div>
+                                    <span class="skill-level">85%</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span class="skill-name">AWS EC2</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" data-width="80"></div>
+                                    </div>
+                                    <span class="skill-level">80%</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span class="skill-name">SQLite</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" data-width="75"></div>
+                                    </div>
+                                    <span class="skill-level">75%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="skill-category">
+                            <h3 class="category-title">Tools & Technologies</h3>
+                            <div class="skill-list">
+                                <div class="skill-item">
+                                    <span class="skill-name">Git</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" data-width="95"></div>
+                                    </div>
+                                    <span class="skill-level">95%</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span class="skill-name">MQTT (IoT)</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" data-width="88"></div>
+                                    </div>
+                                    <span class="skill-level">88%</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span class="skill-name">SonarQube</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" data-width="80"></div>
+                                    </div>
+                                    <span class="skill-level">80%</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span class="skill-name">Apache Maven</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" data-width="75"></div>
+                                    </div>
+                                    <span class="skill-level">75%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Projects Section -->
+            <section id="projects" class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <span class="terminal-green">$</span> ls -la ~/projects/
+                        </h2>
+                    </div>
+                    <div class="projects-grid">
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="fuzzy.jpg" alt="Fuzzy Logic Color Recommendation System" class="project-img">
+                                <div class="project-overlay">
+                                    <span class="project-type research">RESEARCH</span>
+                                </div>
+                            </div>
+                            <div class="project-content">
+                                <h3 class="project-title">Fuzzy Logic Color Recommendation System</h3>
+                                <p class="project-description">
+                                    Designed machine learning-based framework for color-blind fashion assistance using fuzzy logic algorithms. 
+                                    Developed processing pipeline combining GrabCut segmentation, K-Means clustering, and BP Neural Network classification.
+                                </p>
+                                <div class="project-tech">
+                                    <span class="tech-tag">Machine Learning</span>
+                                    <span class="tech-tag">Fuzzy Logic</span>
+                                    <span class="tech-tag">Python</span>
+                                    <span class="tech-tag">HSV Color Space</span>
+                                </div>
+                                <div class="project-links">
+                                    <a href="#" class="project-btn">Research Paper</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="rfid.webp" alt="Smart RFID Access Control System" class="project-img">
+                                <div class="project-overlay">
+                                    <span class="project-type iot">IoT PROJECT</span>
+                                </div>
+                            </div>
+                            <div class="project-content">
+                                <h3 class="project-title">Smart RFID Access Control System</h3>
+                                <p class="project-description">
+                                    Developed RFID-based security system using ESP32 microcontroller supporting 20+ user credentials with Google Sheets integration 
+                                    for real-time access logging and web dashboard for remote monitoring.
+                                </p>
+                                <div class="project-tech">
+                                    <span class="tech-tag">ESP32</span>
+                                    <span class="tech-tag">C++</span>
+                                    <span class="tech-tag">IoT</span>
+                                    <span class="tech-tag">RFID</span>
+                                    <span class="tech-tag">WiFi</span>
+                                </div>
+                                <div class="project-links">
+                                    <a href="https://github.com/Maou3434/RFID" class="project-btn">GitHub</a>
+                                    <a href="https://maou3434.github.io/RFID/" class="project-btn">Demo</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="whatsapp.png" alt="WhatsApp Chat Analyzer" class="project-img">
+                                <div class="project-overlay">
+                                    <span class="project-type data">DATA VIZ</span>
+                                </div>
+                            </div>
+                            <div class="project-content">
+                                <h3 class="project-title">WhatsApp Chat Analyzer</h3>
+                                <p class="project-description">
+                                    Built interactive data visualization dashboards using Chart.js for analyzing 100,000+ WhatsApp messages with sub-second processing. 
+                                    Features emoji tracking, message patterns, and user activity metrics.
+                                </p>
+                                <div class="project-tech">
+                                    <span class="tech-tag">JavaScript</span>
+                                    <span class="tech-tag">Chart.js</span>
+                                    <span class="tech-tag">Data Visualization</span>
+                                    <span class="tech-tag">Analytics</span>
+                                </div>
+                                <div class="project-links">
+                                    <a href="https://github.com/Maou3434/whatswarped" class="project-btn">GitHub</a>
+                                    <a href="https://maou3434.github.io/whatswarped/" class="project-btn">Live Demo</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Achievements Section -->
+            <section id="achievements" class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <span class="terminal-green">$</span> find ~/achievements -name "*.trophy"
+                        </h2>
+                    </div>
+                    <div class="achievements-grid">
+                        <div class="achievement-card">
+                            <div class="achievement-icon">🏆</div>
+                            <div class="achievement-content">
+                                <h3 class="achievement-title">IEEE IAS CodeDoc Hackathon</h3>
+                                <p class="achievement-description">2nd Place at VIT Vellore - Only freshman in top 5 teams</p>
+                                <!-- <div class="achievement-date">2024</div> -->
+                                <div class="achievement-badge hackathon">HACKATHON</div>
+                            </div>
+                        </div>
+
+                        <div class="achievement-card">
+                            <div class="achievement-icon">🥇</div>
+                            <div class="achievement-content">
+                                <h3 class="achievement-title">IIMUN Winner</h3>
+                                <p class="achievement-description">Indian International Model UN - Best Delegate award</p>
+                                <!-- <div class="achievement-date">2024</div> -->
+                                <div class="achievement-badge mun">MODEL UN</div>
+                            </div>
+                        </div>
+
+                        <div class="achievement-card">
+                            <div class="achievement-icon">🥈</div>
+                            <div class="achievement-content">
+                                <h3 class="achievement-title">KCT MUN Runner-Up</h3>
+                                <p class="achievement-description">University-level Model UN competition in Coimbatore</p>
+                                <!-- <div class="achievement-date">2024</div> -->
+                                <div class="achievement-badge mun">MODEL UN</div>
+                            </div>
+                        </div>
+
+                        <div class="achievement-card">
+                            <div class="achievement-icon">🎖️</div>
+                            <div class="achievement-content">
+                                <h3 class="achievement-title">NCC Achievements</h3>
+                                <p class="achievement-description">2 Silver Medals in Aeromodelling & Shooting, Leadership Training, Best Cadet Finalist</p>
+                                <!-- <div class="achievement-date">2023-2024</div> -->
+                                <div class="achievement-badge ncc">NCC</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section id="contact" class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <span class="terminal-green">$</span> ./contact.sh --interactive
+                        </h2>
+                    </div>
+                    <div class="contact-grid">
+                        <div class="contact-info">
+                            <div class="contact-card">
+                                <h3 class="card-title">Get In Touch</h3>
+                                <div class="contact-methods">
+                                    <div class="contact-method">
+                                        <span class="method-icon">📧</span>
+                                        <div class="method-details">
+                                            <span class="method-label">Email</span>
+                                            <a href="mailto:abimanyu.jayaganesh@gmail.com" class="method-value terminal-link">
+                                                abimanyu.jayaganesh@gmail.com
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="contact-method">
+                                        <span class="method-icon">📱</span>
+                                        <div class="method-details">
+                                            <span class="method-label">Phone</span>
+                                            <a href="tel:+917339666043" class="method-value terminal-link">
+                                                (+91) 73396 66043
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="contact-method">
+                                        <span class="method-icon">📍</span>
+                                        <div class="method-details">
+                                            <span class="method-label">Location</span>
+                                            <span class="method-value">Coimbatore, TN</span>
+                                        </div>
+                                    </div>
+                                    <div class="contact-method">
+                                        <span class="method-icon">🌐</span>
+                                        <div class="method-details">
+                                            <span class="method-label">Languages</span>
+                                            <span class="method-value">Tamil (Native), English (Professional), Japanese (Basic), Hindi (Conversational)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="contact-form-container">
+                            <div class="contact-card">
+                                <h3 class="card-title">Send Message</h3>
+                                <form class="contact-form" id="contact-form">
+                                    <div class="form-group">
+                                        <label class="form-label">$ echo "name" ></label>
+                                        <input type="text" name="name" class="form-input" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">$ echo "email" ></label>
+                                        <input type="email" name="email" class="form-input" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">$ cat > message.txt</label>
+                                        <textarea name="message" class="form-input" rows="4" required></textarea>
+                                    </div>
+                                    <button type="submit" class="submit-btn">
+                                        <span class="btn-text">./send_message.sh</span>
+                                        <span class="btn-loading hidden">sending...</span>
+                                    </button>
+                                </form>
+                                <div class="form-output hidden" id="form-output">
+                                    <div class="success-message">
+                                        <span class="terminal-green">✅ Message sent successfully!</span>
+                                        <p>I'll get back to you soon.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="portfolio-footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-terminal">
+                        <div class="command-line">
+                            <span class="terminal-prompt">abimanyu@dev:~$</span>
+                            <span>echo "Thanks for visiting! 🚀"</span>
+                        </div>
+                        <div class="footer-output">
+                            <p>© 2025 Abimanyu Jayaganesh. Built with ❤️ and lots of ☕</p>
+                            <p class="footer-note">Always learning, always growing | Switch to terminal mode for interactive experience</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+    </script>
+</body>
+</html>
