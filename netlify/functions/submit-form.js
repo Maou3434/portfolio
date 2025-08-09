@@ -33,7 +33,7 @@ export async function handler(event) {
     // Send a notification email
     await resend.emails.send({
       from: 'onboarding@resend.dev',
-      to: 'abimanyu.jayaganesh@gmail.com',
+      to: 'abimanyu07.ajj@gmail.com',
       subject: 'New Contact Form Submission',
       html: `<p>You have a new contact form submission:</p>
              <p><strong>Name:</strong> ${name}</p>
