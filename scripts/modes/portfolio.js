@@ -132,7 +132,7 @@ function animateSkillBars() {
     });
 }
 
-function handleFormSubmission(form, output) {
+async function handleFormSubmission(form, output) {
     const submitBtn = form.querySelector('.submit-btn');
     const btnText = submitBtn.querySelector('.btn-text');
     const btnLoading = submitBtn.querySelector('.btn-loading');
@@ -142,22 +142,47 @@ function handleFormSubmission(form, output) {
     btnLoading.classList.remove('hidden');
     submitBtn.disabled = true;
 
-    // Simulate form processing
-    setTimeout(() => {
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+        const response = await fetch('/.netlify/functions/submit-form', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+            // Show success message
+            output.classList.remove('hidden');
+            form.reset();
+        } else {
+            // Show error message
+            const errorOutput = document.createElement('div');
+            errorOutput.className = 'error-message';
+            errorOutput.textContent = 'An error occurred. Please try again.';
+            form.appendChild(errorOutput);
+        }
+    } catch (error) {
+        console.error(error);
+        // Show error message
+        const errorOutput = document.createElement('div');
+        errorOutput.className = 'error-message';
+        errorOutput.textContent = 'An error occurred. Please try again.';
+        form.appendChild(errorOutput);
+    } finally {
         // Hide loading state
         btnText.classList.remove('hidden');
         btnLoading.classList.add('hidden');
         submitBtn.disabled = false;
 
-        // Show success message
-        output.classList.remove('hidden');
-        form.reset();
-
         // Hide success message after 5 seconds
         setTimeout(() => {
             output.classList.add('hidden');
         }, 5000);
-    }, 2000);
+    }
 }
 
 function setupPortfolioAnimations() {
